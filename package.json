@@ -1,0 +1,30 @@
+{
+  "name": "speech-to-text-service",
+  "version": "0.0.1",
+  "description": "service to allow run speech to text recognition",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meerfolk/speech-to-text-service.git"
+  },
+  "author": "Meerfolk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meerfolk/speech-to-text-service/issues"
+  },
+  "homepage": "https://github.com/meerfolk/speech-to-text-service#readme",
+  "devDependencies": {
+    "@types/node": "^17.0.8",
+    "@typescript-eslint/eslint-plugin": "^5.9.0",
+    "@typescript-eslint/parser": "^5.9.0",
+    "eslint": "^8.6.0",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.5.4"
+  },
+  "dependencies": {
+    "fastify": "^3.25.3"
+  }
+}
