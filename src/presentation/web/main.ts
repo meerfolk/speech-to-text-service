@@ -1,6 +1,7 @@
-import { IWebService, FastifyWebService } from '../../infrastructure/web';
+import { DIContainer } from '../../infrastructure/di-container';
 
-const webService: IWebService = new FastifyWebService({ port: 3000 });
+const di = new DIContainer();
+const webService = di.get('WebService');
 
 (async function() {
     await webService.init();
