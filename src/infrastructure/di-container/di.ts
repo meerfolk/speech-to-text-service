@@ -3,6 +3,7 @@ import { ILoggerService } from '../../domain/interfaces';
 import { ConsoleLoggerService } from '../logger';
 import { IWebService, FastifyWebService } from '../web';
 import { IConfigurationService, ConfigurationService } from '../configuration';
+import { Controller } from '../../presentation/web/controller';
 
 export class DIContainer {
     private readonly container;
@@ -30,8 +31,9 @@ export class DIContainer {
             const configuration = this.get('ConfigurationService');
 
             const webConfiguration = configuration.get('web') as { port: number };
+            const controller = new Controller();
 
-            this.singletones.set('WebService', new FastifyWebService(webConfiguration, logger));
+            this.singletones.set('WebService', new FastifyWebService(controller, webConfiguration, logger));
         }
 
         return this.singletones.get('WebService') as IWebService;
