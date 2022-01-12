@@ -1,17 +1,19 @@
+import { IWebService, IRequest } from './interfaces';
+
 export class Controller {
-    public static GET_DEFAULT_EP_SYMBOL = Symbol('/');
+    constructor(private readonly webService: IWebService) {}
 
-    private readonly routes = {
-        [Controller.GET_DEFAULT_EP_SYMBOL]: this.baseGet.bind(this),
-    };
-
-    private baseGet(): { message: string } {
-        return {
-            message: 'OK',
-        };
+    private async baseGet(): Promise<string> {
+        return 'OK';
     }
 
-    public getRoutes(): typeof this.routes {
-        return this.routes;
+    private init(): void {
+        this.webService.addGetRoute<string>('/', (_req: IRequest) => this.baseGet());
+    }
+
+    public async webServiceStart(): Promise<void> {
+        this.init();
+
+        this.webService.start();
     }
 }
