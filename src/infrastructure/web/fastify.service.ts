@@ -12,12 +12,40 @@ export class FastifyWebService implements IWebService {
         private readonly options: IWebServiceOptions,
         private readonly logger: ILoggerService,
     ) {
-        this.server = Fastify({});
+        const server = Fastify({});
+        // @ts-ignore
+        server.addContentTypeParser('application/octet-stream', async function(req){
+            const result = await new Promise((resolve, reject) => {
+                const chunks: Array<Buffer> = [];
+                req.on('data', (chunk: Buffer) => chunks.push(chunk))
+                req.on('end', () => {
+                    const fullBuffer = Buffer.concat(chunks);
+                    resolve(fullBuffer);
+                });
+                req.on('error', (error: unknown) => {
+                    reject(error);
+                });
+            });
+
+            return result;
+        });
+        this.server = server;
     }
 
-    public addGetRoute<T>(path: string, handler: (req: IRequest) => Promise<T>): void {
+    public addGetRoute<T>(path: string, handler: (req: IRequest<void>) => Promise<T>): void {
         this.server.get(path, async (req) => {
-            const result = await handler(req);
+            const result = await handler({ headers: req.headers, body: undefined });
+
+            return result;
+        });
+    }
+
+    public addPostRoute<T,U>(path: string, handler: (req: IRequest<U>) => Promise<T>): void {
+        this.server.post(path, async (req) => {
+            const result = await handler({
+                headers: req.headers,
+                body: req.body as U,
+            });
 
             return result;
         });
