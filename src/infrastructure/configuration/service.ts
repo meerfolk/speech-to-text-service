@@ -1,24 +1,24 @@
 import path from 'path';
 
-import { IConfigurationService } from './interfaces';
+import { ILoggerService } from '~/domain';
 
-export class ConfigurationService implements IConfigurationService {
-    private readonly configuration: Record<string, unknown> = {};
+import { schema, SchemaType } from './schema';
 
-    constructor(private readonly configurationPath: string) {
-        /* eslint-disable @typescript-eslint/no-var-requires */
-        this.configuration = require(path.join(process.cwd(), this.configurationPath));
-        /* eslint-enable @typescript-eslint/no-var-requires */
-    }
+export class ConfigurationService {
+    public readonly configuration: SchemaType;
 
-    public get<T>(path: string): T {
-        const result = path.split('.')
-            .reduce<Record<string, unknown>>((config, path) => {
-                const partialContfig = config[path];
+    constructor(
+        private readonly configurationPath: string,
+        private readonly logger: ILoggerService,
+    ) {
+        const config = require(path.join(process.cwd(), this.configurationPath));
+        const parse = schema.safeParse(config);
 
-                return partialContfig as Record<string, unknown>;
-            }, this.configuration);
-
-        return result as T;
+        if (parse.success) {
+            this.configuration = parse.data;
+        } else {
+            this.logger.info(parse.error);
+            throw new Error(`Configuration doesn't parsed`);
+        }
     }
 }
