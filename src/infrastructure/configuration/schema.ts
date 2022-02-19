@@ -3,6 +3,7 @@ import { z as Z } from 'zod';
 export const schema = Z.object({
     web: Z.object({
         port: Z.number(),
+        viewsRoot: Z.string(),
     }),
     cloud: Z.object({
         yandex: Z.object({

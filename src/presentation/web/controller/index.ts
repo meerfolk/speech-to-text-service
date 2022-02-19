@@ -1,2 +1,2 @@
-export * from './controller';
+export * from './main.controller';
 export * from './interfaces';
