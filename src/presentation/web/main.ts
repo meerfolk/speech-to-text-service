@@ -1,12 +1,12 @@
 import { DIContainer } from '../../infrastructure/di-container';
 
-import { Controller } from './controller';
+import { MainController } from './controller';
 
 const di = new DIContainer();
 const webService = di.get('WebService');
 
 (async function() {
-    const controller = new Controller(webService);
+    const controller = new MainController(webService);
 
-    controller.webServiceStart();
+    controller.init();
 })()
