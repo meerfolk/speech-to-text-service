@@ -1,4 +1,6 @@
 import Fastify, { FastifyInstance } from 'fastify';
+import poinOfView from 'point-of-view';
+import mustache from 'mustache';
 
 import { ILoggerService } from '../../domain/interfaces';
 import { IWebService, IRequest } from '../../presentation/web/controller';
@@ -29,6 +31,13 @@ export class FastifyWebService implements IWebService {
 
             return result;
         });
+        server.register(poinOfView, {
+            engine: {
+                mustache,
+            },
+            root: this.options.viewsRoot,
+        });
+
         this.server = server;
     }
 
@@ -48,6 +57,13 @@ export class FastifyWebService implements IWebService {
             });
 
             return result;
+        });
+    }
+
+    public addHtmlGetRoute(path: string, template: string, handler: () => Promise<Record<string, unknown>>): void {
+        this.server.get(path, async (_req, reply) => {
+            const data = await handler();
+            reply.view(template, data)
         });
     }
 
