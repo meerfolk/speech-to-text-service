@@ -1,6 +1,8 @@
 import Fastify, { FastifyInstance } from 'fastify';
 import poinOfView from 'point-of-view';
 import mustache from 'mustache';
+import fastifyStatic from 'fastify-static';
+import path from 'path';
 
 import { ILoggerService } from '../../domain/interfaces';
 import { IWebService, IRequest } from '../../presentation/web/controller';
@@ -36,6 +38,9 @@ export class FastifyWebService implements IWebService {
                 mustache,
             },
             root: this.options.viewsRoot,
+        });
+        server.register(fastifyStatic, {
+            root: path.join(process.cwd(), '/public'),
         });
 
         this.server = server;
