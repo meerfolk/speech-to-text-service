@@ -7,3 +7,8 @@ export interface ILoggerService {
 export interface ICloudService {
     upload: (model: UploadModel) => Promise<void>;
 }
+
+export interface IFileNameGenerator {
+    generate: () => string;
+}
+
