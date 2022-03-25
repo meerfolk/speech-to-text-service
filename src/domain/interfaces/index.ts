@@ -1,4 +1,4 @@
-import { UploadModel } from './upload.model';
+import { UploadModel } from '../upload.model';
 
 export interface ILoggerService {
     info: (obj: unknown) => void;
@@ -11,4 +11,6 @@ export interface ICloudService {
 export interface IFileNameGenerator {
     generate: () => string;
 }
+
+export * from './http-request.service';
 
