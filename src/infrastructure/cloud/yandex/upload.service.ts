@@ -1,12 +1,8 @@
 import AWS from 'aws-sdk';
+
 import { UploadModel } from '~/domain';
 
-export interface IYandexStorageOptions {
-    key: string;
-    id: string;
-    region: string;
-    bucket: string;
-}
+import { IYandexStorageOptions } from './interfaces';
 
 export class YandexUploadService {
     private static STORAGE_ENPOINT = 'https://storage.yandexcloud.net';
