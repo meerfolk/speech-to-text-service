@@ -1,6 +1,6 @@
 import path from 'path';
 
-import { ILoggerService } from '~/domain';
+import { ILoggerService } from '~/domain/interfaces';
 
 import { schema, SchemaType } from './schema';
 

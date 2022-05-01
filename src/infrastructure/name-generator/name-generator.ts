@@ -1,4 +1,4 @@
-import { IFileNameGenerator } from "~/domain";
+import { IFileNameGenerator } from '~/domain/interfaces';
 
 export class NameGenerator implements IFileNameGenerator {
     private numTo2DigitsString(num: number): string {

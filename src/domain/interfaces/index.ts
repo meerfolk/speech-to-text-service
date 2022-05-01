@@ -1,4 +1,4 @@
-import { UploadModel } from '../upload.model';
+import { UploadModel, SpeechRecognitionModel } from '../models';
 
 export interface ILoggerService {
     info: (obj: unknown) => void;
@@ -6,6 +6,7 @@ export interface ILoggerService {
 
 export interface ICloudService {
     upload: (model: UploadModel) => Promise<void>;
+    recognize: (model: UploadModel) => Promise<SpeechRecognitionModel | null>;
 }
 
 export interface IFileNameGenerator {

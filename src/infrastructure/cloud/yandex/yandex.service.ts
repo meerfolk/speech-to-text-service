@@ -1,9 +1,11 @@
 import {
   ICloudService,
   IHttpRequestService,
+} from '~/domain/interfaces';
+import {
   UploadModel,
   SpeechRecognitionModel,
-} from '~/domain';
+} from '~/domain/models';
 
 import { YandexUploadService, } from './upload.service';
 import { YandexSpeechkitService } from './recognize.service';

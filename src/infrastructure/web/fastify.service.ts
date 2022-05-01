@@ -5,7 +5,7 @@ import fastifyStatic from 'fastify-static';
 import path from 'path';
 
 import { ILoggerService } from '../../domain/interfaces';
-import { IWebService, IRequest } from '../../presentation/web/controller';
+import { IWebService, IRequest } from '../../presentation/web';
 
 import { IWebServiceOptions } from './interfaces';
 

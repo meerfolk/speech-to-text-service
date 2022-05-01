@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 
-import { UploadModel } from '~/domain';
+import { UploadModel } from '~/domain/models';
 
 import { IYandexStorageOptions } from './interfaces';
 
