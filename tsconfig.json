@@ -1,4 +1,8 @@
 {
+    "ts-node": {
+        "transpileOnly": true,
+        "require": [ "typescript-transform-paths/register" ]
+    },
     "compilerOptions": {
         "moduleResolution": "Node",
         "target": "ES2019",
@@ -10,8 +14,13 @@
         "module": "CommonJS",
         "esModuleInterop": true,
         "lib": ["ES2019"],
+        "baseUrl": "./",
         "paths": {
             "~/*": ["./src/*"]
-        }
+        },
+        "plugins": [
+            { "transform": "typescript-transform-paths" },
+            { "transform": "typescript-transform-paths", "afterDeclarations": true }
+        ]
     }
 }
