@@ -1,11 +1,19 @@
+import { IFileNameGenerator, ICloudService } from './interfaces';
 import { UseCaseFactory } from './use-cases/use-case.factory';
 
 export class RecognitionService {
-    constructor(private readonly useCaseFactory: UseCaseFactory ) {}
+    private readonly useCaseFactory: UseCaseFactory;
 
-    public async recognize(file: Buffer): Promise<void> {
+    constructor(
+        readonly cloudService: ICloudService,
+        readonly nameGenerator: IFileNameGenerator,
+    ) {
+        this.useCaseFactory = new UseCaseFactory(cloudService, nameGenerator);
+    }
+
+    public async recognize(file: Buffer): Promise<string> {
         const recognizeFileUseCase = this.useCaseFactory.createRecognizeFileUseCase();
 
-        await recognizeFileUseCase.execute(file);
+        return recognizeFileUseCase.execute(file);
     }
 }

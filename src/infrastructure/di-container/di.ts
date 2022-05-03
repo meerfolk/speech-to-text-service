@@ -1,11 +1,13 @@
-import { ILoggerService, ICloudService, IHttpRequestService } from '~/domain/interfaces';
+import { ILoggerService, ICloudService, IHttpRequestService, IFileNameGenerator } from '~/domain/interfaces';
+import { RecognitionService } from '~/domain/recognition.service';
 import { IWebService } from '~/presentation/web';
 
 import { ConsoleLoggerService } from '../logger';
 import { FastifyWebService } from '../web';
 import { ConfigurationService } from '../configuration';
 import { HttpRequestService } from '../http';
-import { YandexService } from '../cloud/yandex/yandex.service';
+import { YandexService } from '../cloud';
+import { NameGenerator } from '../name-generator';
 
 export class DIContainer {
     private readonly container = {
@@ -14,6 +16,8 @@ export class DIContainer {
         WebService: this.WebServiceFactory.bind(this),
         CloudService: this.CloudServiceFactory.bind(this),
         HttpRequestService: this.HttpRequestServiceFactory.bind(this),
+        RecognitionService: this.RecognitionServiceFactory.bind(this),
+        FileNameGenerator: this.FileNameGeneratorFactory.bind(this),
     };
     private readonly singletones: Map<keyof (typeof this.container), unknown> = new Map();
 
@@ -72,6 +76,25 @@ export class DIContainer {
         }
 
         return this.singletones.get('HttpRequestService') as IHttpRequestService;
+    }
+
+    private RecognitionServiceFactory(): RecognitionService {
+        if (!this.singletones.has('RecognitionService')) {
+            const nameGenerator = this.FileNameGeneratorFactory();
+            const cloudService = this.CloudServiceFactory();
+
+            this.singletones.set('RecognitionService', new RecognitionService(cloudService, nameGenerator));
+        }
+
+        return this.singletones.get('RecognitionService') as RecognitionService;
+    }
+
+    private FileNameGeneratorFactory(): IFileNameGenerator {
+        if (!this.singletones.has('FileNameGenerator')) {
+            this.singletones.set('FileNameGenerator', new NameGenerator())
+        }
+
+        return this.singletones.get('FileNameGenerator') as IFileNameGenerator;
     }
 
     public get<T extends keyof (typeof this.container)>(token: T): ReturnType<typeof this.container[T]>{

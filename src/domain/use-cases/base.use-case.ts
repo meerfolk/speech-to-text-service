@@ -1,3 +1,3 @@
-export abstract class BaseUseCase<T> {
-    public  abstract execute(options: T): Promise<void>;
+export abstract class BaseUseCase<T,U=void> {
+    public  abstract execute(options: T): Promise<U>;
 }

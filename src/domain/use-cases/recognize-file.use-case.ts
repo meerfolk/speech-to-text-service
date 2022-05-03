@@ -11,13 +11,13 @@ export class RecognizeFileUseCase extends BaseUseCase<Buffer> {
         super();
     }
 
-    public async execute(file: Buffer): Promise<void> {
+    public async execute(file: Buffer): Promise<string> {
         const name = this.fileNameGenerator.generate();
         const model = new UploadModel(name, file);
 
         await this.cloudService.upload(model);
         const srModel = await this.cloudService.recognize(model);
 
-        console.log(JSON.stringify(srModel));
+        return srModel.recognitionId;
     }
 }

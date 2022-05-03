@@ -65,7 +65,7 @@ export class YandexSpeechkitService {
         return response;
     }
 
-    public async recognize(model: UploadModel): Promise<SpeechRecognitionModel | null> {
+    public async recognize(model: UploadModel): Promise<SpeechRecognitionModel> {
         const [_res, body] = await this.sendRequest(model);
 
         const { id } = body as { id: string };

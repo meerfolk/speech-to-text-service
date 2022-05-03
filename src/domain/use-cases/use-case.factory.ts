@@ -1,4 +1,5 @@
 import { IFileNameGenerator, ICloudService } from '../interfaces';
+
 import { RecognizeFileUseCase } from './recognize-file.use-case';
 
 export class UseCaseFactory {

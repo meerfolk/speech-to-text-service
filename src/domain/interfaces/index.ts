@@ -6,7 +6,7 @@ export interface ILoggerService {
 
 export interface ICloudService {
     upload: (model: UploadModel) => Promise<void>;
-    recognize: (model: UploadModel) => Promise<SpeechRecognitionModel | null>;
+    recognize: (model: UploadModel) => Promise<SpeechRecognitionModel>;
 }
 
 export interface IFileNameGenerator {

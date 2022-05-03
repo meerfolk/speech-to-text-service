@@ -32,10 +32,10 @@ export class YandexService implements ICloudService {
     }
 
     public async upload(model: UploadModel): Promise<void> {
-        this.uploadService.upload(model);
+        await this.uploadService.upload(model);
     }
 
-    public async recognize(model: UploadModel): Promise<SpeechRecognitionModel | null> {
+    public async recognize(model: UploadModel): Promise<SpeechRecognitionModel> {
       return this.recognitionService.recognize(model);
     }
 }

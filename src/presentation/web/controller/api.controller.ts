@@ -1,10 +1,15 @@
+import { RecognitionService } from '~/domain/recognition.service';
 import { IWebService, IRequest } from './interfaces';
 
 export class ApiController {
-    constructor(private readonly webService: IWebService) {}
+    constructor(
+      private readonly webService: IWebService,
+      private readonly recognitionService: RecognitionService) {}
 
     private async upload(file: Buffer): Promise<string> {
-        return `${file.length} bytes was uploaded`;
+        const recognitionId = await this.recognitionService.recognize(file);
+
+        return recognitionId;
     }
 
     public init(): void {
