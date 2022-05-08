@@ -53,7 +53,7 @@ export class YandexSpeechkitService {
         };
     }
 
-    private async sendRequest(model: UploadModel): Promise<[RawResponse, unknown]> {
+    private async sendRequestToStartRecognition(model: UploadModel): Promise<[RawResponse, unknown]> {
         const url = this.getServiceUrl();
         const body = this.generateBody(model.name);
         const headers = this.generateHeaders();
@@ -66,7 +66,7 @@ export class YandexSpeechkitService {
     }
 
     public async recognize(model: UploadModel): Promise<SpeechRecognitionModel> {
-        const [_res, body] = await this.sendRequest(model);
+        const [_res, body] = await this.sendRequestToStartRecognition(model);
 
         const { id } = body as { id: string };
 
