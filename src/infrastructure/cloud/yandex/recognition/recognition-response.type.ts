@@ -1,10 +1,10 @@
-type RecognitionChunk = {
-    alternatives: { text: string }[];
-    channelTag: string;
-}
-
 type RecognitionResponse = {
     chunks: RecognitionChunk[];
+}
+
+export type RecognitionChunk = {
+    alternatives: { text: string }[];
+    channelTag: string;
 }
 
 export type SuccessRecognitionResponse = {
