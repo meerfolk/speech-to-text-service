@@ -1,7 +1,7 @@
 import { IncomingMessage } from 'http';
 import { request } from 'https';
 
-import { IHttpRequestService, ILoggerService, IPostOptions } from '../../domain/interfaces';
+import { IGetOptions, IHttpRequestService, ILoggerService, IPostOptions } from '../../domain/interfaces';
 
 type Methods = 'GET' | 'POST';
 
@@ -76,19 +76,17 @@ export class HttpRequestService implements IHttpRequestService {
         });
     }
 
-    public async get(url: string): Promise<unknown> {
-        const [_response, buffer] = await this.requestRaw({
-            url,
-            method: 'GET',
-        });
+    public async get(url: string, options?: IGetOptions): Promise<unknown> {
+        const buffer = await this.getBuffer(url, options);
 
         return this.bufferToObj(buffer);
     }
 
-    public async getBuffer(url: string): Promise<Buffer> {
+    public async getBuffer(url: string, options?: IGetOptions): Promise<Buffer> {
         const [_, buffer] = await this.requestRaw({
             url,
             method: 'GET',
+            headers: this.generatePostHeaders(options?.headers),
         });
 
         return buffer;
