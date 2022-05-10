@@ -1,6 +1,7 @@
 export interface IRequest<T> {
     headers: Record<string, string | string[] | undefined>;
     body: T;
+    query?: Record<string, string>;
 }
 
 export interface IWebService {

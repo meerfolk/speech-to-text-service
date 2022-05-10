@@ -12,7 +12,20 @@ export class ApiController {
         return recognitionId;
     }
 
+    private async getRecognition(req: IRequest<void>): Promise<string> {
+        const operationId = req.query?.operationId;
+
+        if (!operationId) {
+            throw new Error('operationId is required');
+        }
+
+        const recognition = await this.recognitionService.getRecognition(operationId);
+
+        return recognition;
+    }
+
     public init(): void {
         this.webService.addPostRoute<string,Buffer>('/', (req: IRequest<Buffer>) => this.upload(req.body))
+        this.webService.addGetRoute<string>('/recognition', this.getRecognition.bind(this));
     }
 }

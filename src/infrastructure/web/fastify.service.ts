@@ -48,7 +48,11 @@ export class FastifyWebService implements IWebService {
 
     public addGetRoute<T>(path: string, handler: (req: IRequest<void>) => Promise<T>): void {
         this.server.get(path, async (req) => {
-            const result = await handler({ headers: req.headers, body: undefined });
+            const result = await handler({
+                headers: req.headers,
+                body: undefined,
+                query: req.query as Record<string, string> ?? undefined,
+            });
 
             return result;
         });
@@ -59,6 +63,7 @@ export class FastifyWebService implements IWebService {
             const result = await handler({
                 headers: req.headers,
                 body: req.body as U,
+                query: req.query as Record<string, string> ?? undefined,
             });
 
             return result;
