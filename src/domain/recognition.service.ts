@@ -16,4 +16,10 @@ export class RecognitionService {
 
         return recognizeFileUseCase.execute(file);
     }
+
+    public async getRecognition(operationId: string): Promise<string> {
+      const getRecognitionUseCase = this.useCaseFactory.createGetRecognitionUseCase();
+
+      return getRecognitionUseCase.execute(operationId);
+    }
 }
