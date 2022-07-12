@@ -15,6 +15,8 @@ module.exports = {
                 apiKey: process.env.YANDEX_SPEECHKIT_API_KEY,
             },
         },
-    }
-
+    },
+    storage: {
+        fileName: process.env.STORAGE_FILE_NAME || 'storage.json',
+    },
 };
