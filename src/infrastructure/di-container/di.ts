@@ -1,4 +1,4 @@
-import { ILoggerService, ICloudService, IHttpRequestService, IFileNameGenerator } from '~/domain/interfaces';
+import { ILoggerService, ICloudService, IHttpRequestService, IFileNameGenerator, IStorageService } from '~/domain/interfaces';
 import { RecognitionService } from '~/domain/recognition.service';
 import { IWebService } from '~/presentation/web';
 
@@ -8,6 +8,7 @@ import { ConfigurationService } from '../configuration';
 import { HttpRequestService } from '../http';
 import { YandexService } from '../cloud';
 import { NameGenerator } from '../name-generator';
+import { StorageService } from '../storage';
 
 export class DIContainer {
     private readonly container = {
@@ -18,6 +19,7 @@ export class DIContainer {
         HttpRequestService: this.HttpRequestServiceFactory.bind(this),
         RecognitionService: this.RecognitionServiceFactory.bind(this),
         FileNameGenerator: this.FileNameGeneratorFactory.bind(this),
+        StorageService: this.StorageServiceFactory.bind(this),
     };
     private readonly singletones: Map<keyof (typeof this.container), unknown> = new Map();
 
@@ -59,7 +61,7 @@ export class DIContainer {
                 speechkit: {
                     apiKey: configurationService.configuration.cloud.yandex.speechkit.apiKey,
                 }
-            }
+            };
             const httpRequestService = this.get('HttpRequestService');
 
             this.singletones.set('CloudService', new YandexService(options, httpRequestService));
@@ -91,11 +93,29 @@ export class DIContainer {
 
     private FileNameGeneratorFactory(): IFileNameGenerator {
         if (!this.singletones.has('FileNameGenerator')) {
-            this.singletones.set('FileNameGenerator', new NameGenerator())
+            this.singletones.set('FileNameGenerator', new NameGenerator());
         }
 
         return this.singletones.get('FileNameGenerator') as IFileNameGenerator;
     }
+
+    private StorageServiceFactory(): IStorageService {
+        if (!this.singletones.has('StorageService')) {
+            const configurationService = this.get('ConfigurationService');
+
+            this.singletones.set(
+                'StorageService',
+                new StorageService(
+                    configurationService.configuration.storage.fileName,
+                    {
+                        recognitions: [],
+                    }
+                ),
+            );
+        }
+
+        return this.singletones.get('StorageService') as IStorageService;
+    } 
 
     public get<T extends keyof (typeof this.container)>(token: T): ReturnType<typeof this.container[T]>{
         const factory = this.container[token];

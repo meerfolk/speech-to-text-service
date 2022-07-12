@@ -18,6 +18,9 @@ export const schema = Z.object({
             }),
         }),
     }),
+    storage: Z.object({
+        fileName: Z.string(),
+    }),
 });
 
 export type SchemaType = Z.infer<typeof schema>;
