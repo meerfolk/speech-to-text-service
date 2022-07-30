@@ -1,4 +1,4 @@
-import Fastify, { FastifyInstance } from 'fastify';
+import Fastify, { FastifyInstance , FastifyRequest, RawRequestDefaultExpression } from 'fastify';
 import poinOfView from 'point-of-view';
 import mustache from 'mustache';
 import fastifyStatic from 'fastify-static';
@@ -16,12 +16,16 @@ export class FastifyWebService implements IWebService {
         private readonly options: IWebServiceOptions,
         private readonly logger: ILoggerService,
     ) {
-        const server = Fastify({});
-        // @ts-ignore
-        server.addContentTypeParser('application/octet-stream', async function(req){
+        const server = Fastify({
+            logger: true,
+        });
+        server.addContentTypeParser('application/octet-stream', async function(
+            _req: FastifyRequest,
+            req: RawRequestDefaultExpression
+        ) {
             const result = await new Promise((resolve, reject) => {
                 const chunks: Array<Buffer> = [];
-                req.on('data', (chunk: Buffer) => chunks.push(chunk))
+                req.on('data', (chunk: Buffer) => chunks.push(chunk));
                 req.on('end', () => {
                     const fullBuffer = Buffer.concat(chunks);
                     resolve(fullBuffer);
@@ -73,7 +77,7 @@ export class FastifyWebService implements IWebService {
     public addHtmlGetRoute(path: string, template: string, handler: () => Promise<Record<string, unknown>>): void {
         this.server.get(path, async (_req, reply) => {
             const data = await handler();
-            reply.view(template, data)
+            reply.view(template, data);
         });
     }
 

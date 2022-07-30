@@ -25,7 +25,7 @@ export class ApiController {
     }
 
     public init(): void {
-        this.webService.addPostRoute<string,Buffer>('/', (req: IRequest<Buffer>) => this.upload(req.body))
+        this.webService.addPostRoute<string,Buffer>('/', (req: IRequest<Buffer>) => this.upload(req.body));
         this.webService.addGetRoute<string>('/recognition', this.getRecognition.bind(this));
     }
 }
