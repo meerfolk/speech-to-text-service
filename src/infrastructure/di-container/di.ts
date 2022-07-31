@@ -84,8 +84,9 @@ export class DIContainer {
         if (!this.singletones.has('RecognitionService')) {
             const nameGenerator = this.FileNameGeneratorFactory();
             const cloudService = this.CloudServiceFactory();
+            const storageService = this.StorageServiceFactory();
 
-            this.singletones.set('RecognitionService', new RecognitionService(cloudService, nameGenerator));
+            this.singletones.set('RecognitionService', new RecognitionService(cloudService, nameGenerator, storageService));
         }
 
         return this.singletones.get('RecognitionService') as RecognitionService;
@@ -107,9 +108,7 @@ export class DIContainer {
                 'StorageService',
                 new StorageService(
                     configurationService.configuration.storage.fileName,
-                    {
-                        recognitions: [],
-                    }
+                    {},
                 ),
             );
         }
