@@ -12,14 +12,14 @@ export class StorageService implements IStorageService {
         private readonly initialInformation: Record<string, unknown>,
     ) {}
 
-    public async read<U>(key: string): Promise<U> {
+    public async read<T>(key: string): Promise<T> {
         const storage = await this.getStorage();
 
         if (storage.data === null) {
             this.throwIfStorageIsEmpty();
         }
 
-        return storage.data[key] as U;
+        return storage.data[key] as T;
     }
 
     public async write(key: string, data: unknown): Promise<void> {
@@ -32,6 +32,16 @@ export class StorageService implements IStorageService {
         storage.data[key] = data;
 
         await storage.write();
+    }
+
+    public async readAll<T>(): Promise<T> {
+        const storage = await this.getStorage();
+
+        if (storage.data === null) {
+            this.throwIfStorageIsEmpty();
+        }
+
+        return storage.data as T;
     }
 
     private async getStorage(): Promise<Low<Record<string, unknown>>> {
