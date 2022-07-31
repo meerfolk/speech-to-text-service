@@ -1,4 +1,6 @@
-import type { Low } from 'lowdb';
+import type { Low, JSONFile as JSONFileType, Adapter } from 'lowdb';
+// @ts-expect-error ts-mixed-mode
+import inclusion from 'inclusion';
 
 import { IStorageService } from '~/domain/interfaces';
 
@@ -41,7 +43,7 @@ export class StorageService implements IStorageService {
     }
 
     private async init(): Promise<Low<Record<string, unknown>>> {
-        const { Low, JSONFile } = await import('lowdb');
+        const { Low, JSONFile } = await inclusion('lowdb') as { Low: new(adapter: Adapter<Record<string, unknown>>) => Low<Record<string, unknown>>, JSONFile: typeof JSONFileType };
 
         this.storage = new Low(new JSONFile(this.fileName));
 
