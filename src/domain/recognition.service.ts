@@ -1,5 +1,6 @@
 import { IFileNameGenerator, ICloudService, IStorageService } from './interfaces';
 import { UseCaseFactory } from './use-cases/use-case.factory';
+import { GetRecognitionListInDto, GetRecognitionListOutDto } from './dtos';
 
 export class RecognitionService {
     private readonly useCaseFactory: UseCaseFactory;
@@ -22,5 +23,11 @@ export class RecognitionService {
         const getRecognitionUseCase = this.useCaseFactory.createGetRecognitionUseCase();
 
         return getRecognitionUseCase.execute(operationId);
+    }
+
+    public async getRecognitionList(dto: GetRecognitionListInDto): Promise<GetRecognitionListOutDto> {
+        const getRecognitionListUseCase = this.useCaseFactory.createGetRecognitionListUseCase();
+
+        return getRecognitionListUseCase.execute(dto);
     }
 }

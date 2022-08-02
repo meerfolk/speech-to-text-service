@@ -1,4 +1,5 @@
 import { RecognitionService } from '~/domain/recognition.service';
+import { GetRecognitionListOutDto } from '~/domain/dtos';
 import { IWebService, IRequest } from './interfaces';
 
 export class ApiController {
@@ -24,8 +25,16 @@ export class ApiController {
         return recognition;
     }
 
+    private async getRecognitionList(req: IRequest<void>): Promise<GetRecognitionListOutDto> {
+        const limit = Number(req.query?.limit);
+        const offset = Number(req.query?.offset);
+
+        return this.recognitionService.getRecognitionList({ limit, offset });
+    }
+
     public init(): void {
         this.webService.addPostRoute<string,Buffer>('/', (req: IRequest<Buffer>) => this.upload(req.body));
         this.webService.addGetRoute<string>('/recognition', this.getRecognition.bind(this));
+        this.webService.addGetRoute<GetRecognitionListOutDto>('/recognitions', this.getRecognitionList.bind(this));
     }
 }
