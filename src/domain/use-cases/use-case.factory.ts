@@ -2,6 +2,7 @@ import { IFileNameGenerator, ICloudService, IStorageService } from '../interface
 
 import { RecognizeFileUseCase } from './recognize-file.use-case';
 import { GetRecognitionUseCase } from './get-recognition.use-case';
+import { GetRecognitionListUseCase } from './get-recognition-list.use-case';
 
 export class UseCaseFactory {
     constructor(
@@ -20,5 +21,9 @@ export class UseCaseFactory {
 
     public createGetRecognitionUseCase(): GetRecognitionUseCase {
         return new GetRecognitionUseCase(this.cloudService);
+    }
+
+    public createGetRecognitionListUseCase(): GetRecognitionListUseCase {
+        return new GetRecognitionListUseCase(this.storageService);
     }
 }
