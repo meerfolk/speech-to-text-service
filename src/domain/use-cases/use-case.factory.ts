@@ -1,4 +1,9 @@
-import { IFileNameGenerator, ICloudService, IStorageService } from '../interfaces';
+import {
+    IFileNameGenerator,
+    ICloudService,
+    IStorageService,
+    IConverterService,
+} from '../interfaces';
 
 import { RecognizeFileUseCase } from './recognize-file.use-case';
 import { GetRecognitionUseCase } from './get-recognition.use-case';
@@ -9,6 +14,7 @@ export class UseCaseFactory {
         private readonly cloudService: ICloudService,
         private readonly fileNameGenerator: IFileNameGenerator,
         private readonly storageService: IStorageService,
+        private readonly converterService?: IConverterService,
     ) {}
 
     public createRecognizeFileUseCase(): RecognizeFileUseCase {
@@ -16,6 +22,7 @@ export class UseCaseFactory {
             this.cloudService,
             this.fileNameGenerator,
             this.storageService,
+            this.converterService,
         );
     }
 
