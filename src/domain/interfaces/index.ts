@@ -16,4 +16,4 @@ export interface IFileNameGenerator {
 
 export * from './http-request.service';
 export * from './storage.service.interface';
-
+export * from './converter.service.interface';
