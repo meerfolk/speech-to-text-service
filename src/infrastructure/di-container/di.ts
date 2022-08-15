@@ -1,4 +1,11 @@
-import { ILoggerService, ICloudService, IHttpRequestService, IFileNameGenerator, IStorageService } from '~/domain/interfaces';
+import {
+    ILoggerService,
+    ICloudService,
+    IHttpRequestService,
+    IFileNameGenerator,
+    IStorageService,
+    IConverterService,
+} from '~/domain/interfaces';
 import { RecognitionService } from '~/domain/recognition.service';
 import { IWebService } from '~/presentation/web';
 
@@ -9,6 +16,7 @@ import { HttpRequestService } from '../http';
 import { YandexService } from '../cloud';
 import { NameGenerator } from '../name-generator';
 import { StorageService } from '../storage';
+import { FFmpegConverterService } from '../converter';
 
 export class DIContainer {
     private readonly container = {
@@ -20,6 +28,7 @@ export class DIContainer {
         RecognitionService: this.RecognitionServiceFactory.bind(this),
         FileNameGenerator: this.FileNameGeneratorFactory.bind(this),
         StorageService: this.StorageServiceFactory.bind(this),
+        ConverterService: this.ConverterServiceFactory.bind(this),
     };
     private readonly singletones: Map<keyof (typeof this.container), unknown> = new Map();
 
@@ -85,8 +94,17 @@ export class DIContainer {
             const nameGenerator = this.FileNameGeneratorFactory();
             const cloudService = this.CloudServiceFactory();
             const storageService = this.StorageServiceFactory();
+            const constverterService = this.ConverterServiceFactory();
 
-            this.singletones.set('RecognitionService', new RecognitionService(cloudService, nameGenerator, storageService));
+            this.singletones.set(
+                'RecognitionService',
+                new RecognitionService(
+                    cloudService,
+                    nameGenerator,
+                    storageService,
+                    constverterService,
+                ),
+            );
         }
 
         return this.singletones.get('RecognitionService') as RecognitionService;
@@ -115,6 +133,14 @@ export class DIContainer {
 
         return this.singletones.get('StorageService') as IStorageService;
     } 
+
+    private ConverterServiceFactory(): IConverterService {
+        if (!this.singletones.has('ConverterService')) {
+            this.singletones.set('ConverterService', new FFmpegConverterService());
+        }
+
+        return this.singletones.get('ConverterService') as IConverterService;
+    }
 
     public get<T extends keyof (typeof this.container)>(token: T): ReturnType<typeof this.container[T]>{
         const factory = this.container[token];

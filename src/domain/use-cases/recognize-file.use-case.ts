@@ -1,4 +1,9 @@
-import { ICloudService, IFileNameGenerator, IStorageService } from '../interfaces';
+import {
+    ICloudService,
+    IFileNameGenerator,
+    IStorageService,
+    IConverterService,
+} from '../interfaces';
 import { UploadModel } from '../models';
 
 import { BaseUseCase } from './base.use-case';
@@ -14,6 +19,7 @@ export class RecognizeFileUseCase extends BaseUseCase<Buffer, string> {
         private readonly cloudService: ICloudService,
         private readonly fileNameGenerator: IFileNameGenerator,
         private readonly storageService: IStorageService,
+        private readonly converterService?: IConverterService,
     ) {
         super();
     }
@@ -22,7 +28,12 @@ export class RecognizeFileUseCase extends BaseUseCase<Buffer, string> {
         return this.storageService.write(recognition.id, recognition);
     }
 
-    public async execute(file: Buffer): Promise<string> {
+    public async execute(baseFile: Buffer): Promise<string> {
+        const file = this.converterService
+            ? await this.converterService.convert(baseFile)
+            : baseFile;
+
+
         const name = this.fileNameGenerator.generate();
         const model = new UploadModel(name, file);
 

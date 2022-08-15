@@ -1,4 +1,9 @@
-import { IFileNameGenerator, ICloudService, IStorageService } from './interfaces';
+import {
+    IFileNameGenerator,
+    ICloudService,
+    IStorageService,
+    IConverterService,
+} from './interfaces';
 import { UseCaseFactory } from './use-cases/use-case.factory';
 import { GetRecognitionListInDto, GetRecognitionListOutDto } from './dtos';
 
@@ -9,8 +14,14 @@ export class RecognitionService {
         readonly cloudService: ICloudService,
         readonly nameGenerator: IFileNameGenerator,
         readonly storageService: IStorageService,
+        readonly converterService?: IConverterService,
     ) {
-        this.useCaseFactory = new UseCaseFactory(cloudService, nameGenerator, storageService);
+        this.useCaseFactory = new UseCaseFactory(
+            cloudService,
+            nameGenerator,
+            storageService,
+            converterService,
+        );
     }
 
     public async recognize(file: Buffer): Promise<string> {

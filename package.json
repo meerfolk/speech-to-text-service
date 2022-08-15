@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/meerfolk/speech-to-text-service#readme",
   "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.20",
     "@types/jest": "^27.4.1",
     "@types/mustache": "^4.1.2",
     "@types/node": "^17.0.8",
@@ -38,6 +39,7 @@
     "aws-sdk": "^2.1066.0",
     "fastify": "^3.25.3",
     "fastify-static": "^4.5.0",
+    "fluent-ffmpeg": "^2.1.2",
     "inclusion": "^1.0.1",
     "lowdb": "^3.0.0",
     "mustache": "^4.2.0",
