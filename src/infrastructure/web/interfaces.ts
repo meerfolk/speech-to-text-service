@@ -4,5 +4,6 @@ export interface IWebService {
 
 export interface IWebServiceOptions {
     port: number;
+    host: string;
     viewsRoot: string;
 }

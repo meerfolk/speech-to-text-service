@@ -84,8 +84,14 @@ export class FastifyWebService implements IWebService {
     }
 
     public async start(): Promise<void> {
-        this.server.listen(this.options.port, () => {
-            this.logger.info(`Service started on ${this.options.port} port`);
-        });
+        this.server.listen(
+            {
+                port: this.options.port,
+                host: this.options.host,
+            },
+            () => {
+                this.logger.info(`Service started on ${this.options.port} port`);
+            },
+        );
     }
 }
