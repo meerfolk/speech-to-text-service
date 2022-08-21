@@ -10,7 +10,7 @@ export class MainController {
     ) {}
 
     public init(): void {
-        const htmlController = new HtmlController(this.webService);
+        const htmlController = new HtmlController(this.webService, this.recognitionService);
         const apiController = new ApiController(this.webService, this.recognitionService);
 
         htmlController.init();
