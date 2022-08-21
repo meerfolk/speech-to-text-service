@@ -1,7 +1,7 @@
 module.exports = {
     web: {
         port: process.env.PORT || 3000,
-        viewsRoot: './views'
+        viewsRoot: process.cwd() + '/src/presentation/web/views'
     },
     cloud: {
         yandex: {
