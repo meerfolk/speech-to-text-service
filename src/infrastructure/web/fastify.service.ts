@@ -1,6 +1,7 @@
 import Fastify, { FastifyInstance , FastifyRequest, RawRequestDefaultExpression } from 'fastify';
 import poinOfView from 'point-of-view';
 import mustache from 'mustache';
+// @ts-expect-error problem with @fastify/static
 import fastifyStatic from 'fastify-static';
 import path from 'path';
 
@@ -45,6 +46,7 @@ export class FastifyWebService implements IWebService {
         });
         server.register(fastifyStatic, {
             root: path.join(process.cwd(), '/public'),
+            prefix: '/public',
         });
 
         this.server = server;

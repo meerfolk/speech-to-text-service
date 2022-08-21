@@ -8,6 +8,8 @@
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit-icons.min.js"></script>
     </head>
     <body>
+        <div hx-get="/html/table" hx-trigger="load,every 5s">
+        </div>
         <div class="uk-margin" uk-margin>
             <div uk-form-custom="target: true">
                 <input id="file" type="file">
@@ -15,6 +17,6 @@
             </div>
             <button id="recognize-btn" class="uk-button uk-button-default">Recognize</button>
         </div>
-        <script src="/upload.js"></script>
+        <script src="upload.js"></script>
     </body>
 </html>

@@ -1,0 +1,20 @@
+<table class="uk-table-striped uk-table-small">
+    <thead>
+        <tr>
+            <th>Recognition Id</th>
+            <th>File Name</th>
+            <th>Done</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#recognitions}}
+            <tr>
+                <td>{{id}}</td>
+                <td>{{uploadFileName}}</td>
+                <td>
+                    <a href="" uk-icon="icon: download" {{^recognitionPath}}hidden{{/recognitionPath}}></a>
+                </td>
+            </tr> 
+        {{/recognitions}}
+    </tbody>
+</table>
