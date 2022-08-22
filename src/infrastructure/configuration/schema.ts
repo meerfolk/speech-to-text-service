@@ -4,6 +4,7 @@ export const schema = Z.object({
     web: Z.object({
         port: Z.number(),
         host: Z.string(),
+        static: Z.string(),
         viewsRoot: Z.string(),
     }),
     cloud: Z.object({

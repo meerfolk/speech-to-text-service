@@ -3,7 +3,6 @@ import poinOfView from 'point-of-view';
 import mustache from 'mustache';
 // @ts-expect-error problem with @fastify/static
 import fastifyStatic from 'fastify-static';
-import path from 'path';
 
 import { ILoggerService } from '../../domain/interfaces';
 import { IWebService, IRequest } from '../../presentation/web';
@@ -45,7 +44,7 @@ export class FastifyWebService implements IWebService {
             root: this.options.viewsRoot,
         });
         server.register(fastifyStatic, {
-            root: path.join(process.cwd(), '/public'),
+            root: this.options.static,
             prefix: '/public',
         });
 
@@ -79,7 +78,7 @@ export class FastifyWebService implements IWebService {
     public addHtmlGetRoute(path: string, template: string, handler: () => Promise<Record<string, unknown>>): void {
         this.server.get(path, async (_req, reply) => {
             const data = await handler();
-            reply.view(template, data);
+            return reply.view(template, data);
         });
     }
 
