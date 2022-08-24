@@ -1,1 +1,1 @@
-export * from "./storage.service";
+export * from './redis-storage.service';
