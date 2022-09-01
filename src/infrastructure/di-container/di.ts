@@ -7,7 +7,7 @@ import {
     IConverterService,
 } from '~/domain/interfaces';
 import { RecognitionService } from '~/domain/recognition.service';
-import { IWebService } from '~/presentation/web';
+import { IValidationService, IWebService } from '~/presentation/web';
 
 import { ConsoleLoggerService } from '../logger';
 import { FastifyWebService } from '../web';
@@ -17,6 +17,7 @@ import { YandexService } from '../cloud';
 import { NameGenerator } from '../name-generator';
 import { StorageService } from '../storage';
 import { FFmpegConverterService } from '../converter';
+import{ ZodValidationService as ValidationService } from '../validation';
 
 export class DIContainer {
     private readonly container = {
@@ -29,6 +30,7 @@ export class DIContainer {
         FileNameGenerator: this.FileNameGeneratorFactory.bind(this),
         StorageService: this.StorageServiceFactory.bind(this),
         ConverterService: this.ConverterServiceFactory.bind(this),
+        ValidationService: this.ValidationServiceFactory.bind(this),
     };
     private readonly singletones: Map<keyof (typeof this.container), unknown> = new Map();
 
@@ -140,6 +142,14 @@ export class DIContainer {
         }
 
         return this.singletones.get('ConverterService') as IConverterService;
+    }
+
+    private ValidationServiceFactory(): IValidationService {
+        if (!this.singletones.has('ValidationService')) {
+            this.singletones.set('ValidationService', new ValidationService());
+        }
+
+        return this.singletones.get('ValidationService') as IValidationService;
     }
 
     public get<T extends keyof (typeof this.container)>(token: T): ReturnType<typeof this.container[T]>{

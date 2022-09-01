@@ -5,7 +5,7 @@ import mustache from 'mustache';
 import fastifyStatic from 'fastify-static';
 
 import { ILoggerService } from '../../domain/interfaces';
-import { IWebService, IRequest } from '../../presentation/web';
+import { IWebService, IRequest, IResponse } from '../../presentation/web';
 
 import { IWebServiceOptions } from './interfaces';
 
@@ -51,13 +51,18 @@ export class FastifyWebService implements IWebService {
         this.server = server;
     }
 
-    public addGetRoute<T>(path: string, handler: (req: IRequest<void>) => Promise<T>): void {
-        this.server.get(path, async (req) => {
-            const result = await handler({
-                headers: req.headers,
-                body: undefined,
-                query: req.query as Record<string, string> ?? undefined,
-            });
+    public addGetRoute<T>(path: string, handler: (req: IRequest<void>, res: IResponse) => Promise<T>): void {
+        this.server.get(path, async (req, rep) => {
+            const result = await handler(
+                {
+                    headers: req.headers,
+                    body: undefined,
+                    query: req.query as Record<string, string> ?? undefined,
+                },
+                {
+                    setStatus: (status: number) => rep.status(status),
+                },
+            );
 
             return result;
         });

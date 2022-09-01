@@ -1,11 +1,13 @@
 import { RecognitionService } from '~/domain/recognition.service';
 import { GetRecognitionListOutDto } from '~/domain/dtos';
-import { IWebService, IRequest } from './interfaces';
+import { IWebService, IRequest, IResponse, IValidationService } from './interfaces';
 
 export class ApiController {
     constructor(
       private readonly webService: IWebService,
-      private readonly recognitionService: RecognitionService) {}
+      private readonly recognitionService: RecognitionService,
+      private readonly validationService: IValidationService,
+    ) {}
 
     private async upload(file: Buffer): Promise<string> {
         const recognitionId = await this.recognitionService.recognize(file);
@@ -25,16 +27,24 @@ export class ApiController {
         return recognition;
     }
 
-    private async getRecognitionList(req: IRequest<void>): Promise<GetRecognitionListOutDto> {
-        const limit = Number(req.query?.limit);
-        const offset = Number(req.query?.offset);
+    private async getRecognitionList(req: IRequest<void>, res: IResponse): Promise<GetRecognitionListOutDto | string> {
+        const data = {
+            limit: Number(req.query?.limit),
+            offset: Number(req.query?.offset),
+        };
+        const validationError = this.validationService.validateRecognitionListRequest(data);
 
-        return this.recognitionService.getRecognitionList({ limit, offset });
+        if (validationError !== null) {
+            res.setStatus(400);
+            return validationError.message;
+        }
+
+        return this.recognitionService.getRecognitionList(data);
     }
 
     public init(): void {
         this.webService.addPostRoute<string,Buffer>('/', (req: IRequest<Buffer>) => this.upload(req.body));
         this.webService.addGetRoute<string>('/recognition', this.getRecognition.bind(this));
-        this.webService.addGetRoute<GetRecognitionListOutDto>('/recognitions', this.getRecognitionList.bind(this));
+        this.webService.addGetRoute<GetRecognitionListOutDto | string>('/recognitions', this.getRecognitionList.bind(this));
     }
 }
