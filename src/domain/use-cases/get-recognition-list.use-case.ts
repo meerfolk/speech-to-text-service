@@ -1,4 +1,4 @@
-import { IStorageService } from '../interfaces';
+import { IRecognitionModel, IStorageService } from '../interfaces';
 
 import { GetRecognitionListInDto, GetRecognitionListOutDto, RecognitionDto } from '../dtos';
  
@@ -12,12 +12,20 @@ export class GetRecognitionListUseCase extends BaseUseCase<GetRecognitionListInD
     public async execute(dto: GetRecognitionListInDto): Promise<GetRecognitionListOutDto> {
         const { limit, offset } = dto;
 
-        const allObj: Record<string, RecognitionDto> = await this.storageService.readAll();
-        const data = Object.values(allObj);
+        const all = await this.storageService.readAll();
 
         return new GetRecognitionListOutDto(
-            data.slice(offset, offset + limit),
-            data.length,
+            all
+                .slice(offset, offset + limit)
+                .map(
+                    (item: IRecognitionModel) =>
+                        new RecognitionDto(
+                            item.id,
+                            item.uploadFileName,
+                            Boolean(item.recognitionPath),
+                        ),
+                ),
+            all.length,
         );
     }
 }

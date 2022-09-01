@@ -15,7 +15,7 @@ import { ConfigurationService } from '../configuration';
 import { HttpRequestService } from '../http';
 import { YandexService } from '../cloud';
 import { NameGenerator } from '../name-generator';
-import { StorageService } from '../storage';
+import { RedisStorageService } from '../storage';
 import { FFmpegConverterService } from '../converter';
 import{ ZodValidationService as ValidationService } from '../validation';
 
@@ -122,13 +122,15 @@ export class DIContainer {
 
     private StorageServiceFactory(): IStorageService {
         if (!this.singletones.has('StorageService')) {
-            const configurationService = this.get('ConfigurationService');
-
             this.singletones.set(
                 'StorageService',
-                new StorageService(
-                    configurationService.configuration.storage.fileName,
-                    {},
+                new RedisStorageService(
+                    {
+                        prefix: 'recognition',
+                        connection: 'redis://192.168.0.177:63791',
+                        idsKey: 'all',
+                        newIdsKey: 'new',
+                    },
                 ),
             );
         }

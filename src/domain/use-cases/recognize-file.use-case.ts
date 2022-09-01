@@ -8,11 +8,6 @@ import { UploadModel } from '../models';
 
 import { BaseUseCase } from './base.use-case';
 
-interface IRecognitionModel {
-  id: string;
-  uploadFileName: string;
-  recognitionPath: string | null;
-}
 
 export class RecognizeFileUseCase extends BaseUseCase<Buffer, string> {
     constructor(
@@ -22,10 +17,6 @@ export class RecognizeFileUseCase extends BaseUseCase<Buffer, string> {
         private readonly converterService?: IConverterService,
     ) {
         super();
-    }
-
-    private async saveRecognition(recognition: IRecognitionModel): Promise<void> {
-        return this.storageService.write(recognition.id, recognition);
     }
 
     public async execute(baseFile: Buffer): Promise<string> {
@@ -40,7 +31,7 @@ export class RecognizeFileUseCase extends BaseUseCase<Buffer, string> {
         await this.cloudService.upload(model);
         const srModel = await this.cloudService.recognize(model);
 
-        await this.saveRecognition({
+        await this.storageService.saveRecognition({
             id: srModel.recognitionId,
             uploadFileName: name,
             recognitionPath: null,
