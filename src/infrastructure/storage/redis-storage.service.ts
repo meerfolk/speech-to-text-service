@@ -75,7 +75,7 @@ export class RedisStorageService implements IStorageService {
     }
 
     public async addRecognitionPath(id: string, path: string): Promise<void> {
-        const data = await this.read<IRecognitionModel>(this.getKey(id));
+        const data = await this.read<IRecognitionModel>(id);
 
         if (data === null) {
             throw new Error(`Recognition with id ${id} not found`);

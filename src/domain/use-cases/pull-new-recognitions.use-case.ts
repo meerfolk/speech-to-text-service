@@ -32,10 +32,7 @@ export class PullNewRecognitionUseCase {
                 throw new Error('Recognition data not found');
             }
 
-            await this.storageService.saveRecognition({
-                ...recognitionData,
-                recognitionPath: `recognition&opreationId=${newId}`,
-            });
+            await this.storageService.addRecognitionPath(newId, newId);
         } catch (error) {
             await this.storageService.pushNewRecognitionId(newId);
             console.error(error);

@@ -12,7 +12,14 @@
                 <td>{{id}}</td>
                 <td>{{uploadFileName}}</td>
                 <td>
-                    <a href="" uk-icon="icon: download" {{^recognitionPath}}hidden{{/recognitionPath}}></a>
+                    <div
+                        uk-icon="icon: download"
+                        {{^isCompleted}}hidden{{/isCompleted}}
+                        hx-get="/recognition?operationId={{id}}"
+                        hx-trigger="click"
+                        hx-target="#recognition-text"
+                    >
+                    </div>
                 </td>
             </tr> 
         {{/recognitions}}
