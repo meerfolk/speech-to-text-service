@@ -17,7 +17,8 @@ import { YandexService } from '../cloud';
 import { NameGenerator } from '../name-generator';
 import { RedisStorageService } from '../storage';
 import { FFmpegConverterService } from '../converter';
-import{ ZodValidationService as ValidationService } from '../validation';
+import { ZodValidationService as ValidationService } from '../validation';
+import { TimeoutSchedulerService as SchedulerService } from '../scheduler';
 
 export class DIContainer {
     private readonly container = {
@@ -31,6 +32,7 @@ export class DIContainer {
         StorageService: this.StorageServiceFactory.bind(this),
         ConverterService: this.ConverterServiceFactory.bind(this),
         ValidationService: this.ValidationServiceFactory.bind(this),
+        SchedulerService: this.SchedulerServiceFactory.bind(this),
     };
     private readonly singletones: Map<keyof (typeof this.container), unknown> = new Map();
 
@@ -121,13 +123,15 @@ export class DIContainer {
     }
 
     private StorageServiceFactory(): IStorageService {
+        const configurationService = this.get('ConfigurationService');
+
         if (!this.singletones.has('StorageService')) {
             this.singletones.set(
                 'StorageService',
                 new RedisStorageService(
                     {
                         prefix: 'recognition',
-                        connection: 'redis://192.168.0.177:63791',
+                        connection: configurationService.configuration.storage.connectionString,
                         idsKey: 'all',
                         newIdsKey: 'new',
                     },
@@ -152,6 +156,19 @@ export class DIContainer {
         }
 
         return this.singletones.get('ValidationService') as IValidationService;
+    }
+
+    private SchedulerServiceFactory(): SchedulerService {
+        const configurationService = this.ConfigurationServiceFactory();
+
+        if (!this.singletones.has('SchedulerService')) {
+            this.singletones.set(
+                'SchedulerService',
+                new SchedulerService(configurationService.configuration.worker.interval),
+            );
+        }
+
+        return this.singletones.get('SchedulerService') as SchedulerService;
     }
 
     public get<T extends keyof (typeof this.container)>(token: T): ReturnType<typeof this.container[T]>{

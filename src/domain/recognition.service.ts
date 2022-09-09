@@ -41,4 +41,10 @@ export class RecognitionService {
 
         return getRecognitionListUseCase.execute(dto);
     }
+
+    public async pullNewRecognition(): Promise<void> {
+        const pullNewRecognitionUseCase = this.useCaseFactory.createPullNewRecognitionUseCase();
+
+        return pullNewRecognitionUseCase.execute();
+    }
 }

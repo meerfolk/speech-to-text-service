@@ -21,7 +21,10 @@ export const schema = Z.object({
         }),
     }),
     storage: Z.object({
-        fileName: Z.string(),
+        connectionString: Z.string(),
+    }),
+    worker: Z.object({
+        interval: Z.number(),
     }),
 });
 

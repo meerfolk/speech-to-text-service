@@ -8,6 +8,7 @@ import {
 import { RecognizeFileUseCase } from './recognize-file.use-case';
 import { GetRecognitionUseCase } from './get-recognition.use-case';
 import { GetRecognitionListUseCase } from './get-recognition-list.use-case';
+import { PullNewRecognitionUseCase } from './pull-new-recognitions.use-case';
 
 export class UseCaseFactory {
     constructor(
@@ -32,5 +33,9 @@ export class UseCaseFactory {
 
     public createGetRecognitionListUseCase(): GetRecognitionListUseCase {
         return new GetRecognitionListUseCase(this.storageService);
+    }
+
+    public createPullNewRecognitionUseCase(): PullNewRecognitionUseCase {
+        return new PullNewRecognitionUseCase(this.storageService, this.cloudService);
     }
 }
