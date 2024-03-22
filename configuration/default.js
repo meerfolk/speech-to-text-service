@@ -20,7 +20,7 @@ module.exports = {
     },
     storage: {
         fileName: process.env.STORAGE_FILE_NAME || 'storage.json',
-        connectionString: process.env.STORAGE_CONNECTION_STRING || 'mongodb://localhost:27017/',
+        connectionString: process.env.STORAGE_CONNECTION_STRING,
     },
     worker: {
         interval: process.env.WORKER_INTERVAL || 5000,

@@ -2,4 +2,5 @@ node_modules
 run*
 dist
 storage.json
+.web.env
 

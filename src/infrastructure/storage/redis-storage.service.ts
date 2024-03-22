@@ -61,6 +61,10 @@ export class RedisStorageService implements IStorageService {
         const keys = (await this.client.lrange(this.getKey(this.idsKey), 0, 100))
             .map((key) => this.getKey(key));
 
+        if (keys.length === 0) {
+            return [];
+        }
+
         const objStrings = await this.client.mget(keys);
 
         return objStrings

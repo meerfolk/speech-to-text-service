@@ -4,6 +4,7 @@
   "description": "service to allow run speech to text recognition",
   "main": "index.js",
   "scripts": {
+    "build": "tsc",
     "test": "TZ=UTC jest"
   },
   "repository": {
