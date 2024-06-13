@@ -6,6 +6,7 @@ export const schema = Z.object({
         host: Z.string(),
         static: Z.string(),
         viewsRoot: Z.string(),
+        basePath: Z.string(),
     }),
     cloud: Z.object({
         yandex: Z.object({

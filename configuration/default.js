@@ -4,6 +4,7 @@ module.exports = {
         host: process.env.HOST || '127.0.0.1',
         static: process.env.PWD + process.env.STATIC_PATH,
         viewsRoot: process.env.PWD + process.env.VIEWS_ROOT,
+        basePath: process.env.BASE_PATH || '',
     },
     cloud: {
         yandex: {
