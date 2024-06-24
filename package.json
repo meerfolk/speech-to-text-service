@@ -40,7 +40,7 @@
     "aws-sdk": "^2.1066.0",
     "fastify": "^3.25.3",
     "fastify-static": "^4.5.0",
-    "fluent-ffmpeg": "^2.1.2",
+    "fluent-ffmpeg-7": "^2.1.5",
     "ioredis": "^5.2.3",
     "mustache": "^4.2.0",
     "point-of-view": "^5.1.0",
