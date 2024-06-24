@@ -15,7 +15,7 @@
                     <div
                         uk-icon="icon: download"
                         {{^isCompleted}}hidden{{/isCompleted}}
-                        hx-get="/recognition?operationId={{id}}"
+                        hx-get="recognition?operationId={{id}}"
                         hx-trigger="click"
                         hx-target="#recognition-text"
                     >

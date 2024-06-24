@@ -3,8 +3,8 @@ import { IWebService } from './interfaces';
 
 export class HtmlController {
     constructor(
-        private readonly webService: IWebService,
-        private readonly recognitionService: RecognitionService,
+    private readonly webService: IWebService,
+    private readonly recognitionService: RecognitionService
     ) {}
 
     private async getTable(): Promise<Record<string, unknown>> {
@@ -13,11 +13,21 @@ export class HtmlController {
             offset: 0,
         });
         return {
-            recognitions: recognitions.data
+            recognitions: recognitions.data,
         };
     }
 
     public init(): void {
-        this.webService.addHtmlGetRoute('/html/table', './table.html', this.getTable.bind(this));
+        this.webService.addHtmlGetRoute(
+            '/html/table',
+            './table.html',
+            this.getTable.bind(this)
+        );
+        this.webService.addHtmlGetRoute('/index.html', './index.html', () =>
+            Promise.resolve({
+                tableGetEndpoint: 'html/table',
+                recognitionPostEndpoint: 'recognition',
+            })
+        );
     }
 }
