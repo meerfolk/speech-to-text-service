@@ -1,12 +1,17 @@
 import { RecognitionService } from '~/domain/recognition.service';
 import { GetRecognitionListOutDto } from '~/domain/dtos';
-import { IWebService, IRequest, IResponse, IValidationService } from './interfaces';
+import {
+    IWebService,
+    IRequest,
+    IResponse,
+    IValidationService,
+} from './interfaces';
 
 export class ApiController {
     constructor(
-      private readonly webService: IWebService,
-      private readonly recognitionService: RecognitionService,
-      private readonly validationService: IValidationService,
+    private readonly webService: IWebService,
+    private readonly recognitionService: RecognitionService,
+    private readonly validationService: IValidationService
     ) {}
 
     private async upload(file: Buffer): Promise<string> {
@@ -22,17 +27,23 @@ export class ApiController {
             throw new Error('operationId is required');
         }
 
-        const recognition = await this.recognitionService.getRecognition(operationId);
+        const recognition = await this.recognitionService.getRecognition(
+            operationId
+        );
 
         return recognition;
     }
 
-    private async getRecognitionList(req: IRequest<void>, res: IResponse): Promise<GetRecognitionListOutDto | string> {
+    private async getRecognitionList(
+        req: IRequest<void>,
+        res: IResponse
+    ): Promise<GetRecognitionListOutDto | string> {
         const data = {
             limit: Number(req.query?.limit),
             offset: Number(req.query?.offset),
         };
-        const validationError = this.validationService.validateRecognitionListRequest(data);
+        const validationError =
+      this.validationService.validateRecognitionListRequest(data);
 
         if (validationError !== null) {
             res.setStatus(400);
@@ -43,8 +54,17 @@ export class ApiController {
     }
 
     public init(): void {
-        this.webService.addPostRoute<string,Buffer>('/', (req: IRequest<Buffer>) => this.upload(req.body));
-        this.webService.addGetRoute<string>('/recognition', this.getRecognition.bind(this));
-        this.webService.addGetRoute<GetRecognitionListOutDto | string>('/recognitions', this.getRecognitionList.bind(this));
+        this.webService.addPostRoute<string, Buffer>(
+            '/recognition',
+            (req: IRequest<Buffer>) => this.upload(req.body)
+        );
+        this.webService.addGetRoute<string>(
+            '/recognition',
+            this.getRecognition.bind(this)
+        );
+        this.webService.addGetRoute<GetRecognitionListOutDto | string>(
+            '/recognitions',
+            this.getRecognitionList.bind(this)
+        );
     }
 }

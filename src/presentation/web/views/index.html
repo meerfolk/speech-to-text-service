@@ -8,7 +8,7 @@
         <script src="https://cdn.jsdelivr.net/npm/uikit@3.11.1/dist/js/uikit-icons.min.js"></script>
     </head>
     <body>
-        <div hx-get="/html/table" hx-trigger="load,every 5s">
+        <div hx-get="{{tableGetEndpoint}}" hx-trigger="load,every 5s">
         </div>
         <div class="uk-margin" uk-margin>
             <div uk-form-custom="target: true">
@@ -18,6 +18,26 @@
             <button id="recognize-btn" class="uk-button uk-button-default">Recognize</button>
         </div>
         <div id="recognition-text"></div>
-        <script src="upload.js"></script>
+        <script>
+            const btnEl = document.getElementById("recognize-btn");
+            btnEl.setAttribute("disabled", true);
+            const fileEl = document.getElementById("file");
+            let file = null;
+            fileEl.addEventListener("change", (e) => {
+                file = e.target.files[0];
+                btnEl.removeAttribute("disabled");
+            })
+            btnEl.addEventListener("click", async () => {
+                await fetch('{{recognitionPostEndpoint}}', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/octet-stream",
+                    },
+                    body: file,
+                });
+                file = null;
+                btnEl.setAttribute("disabled", true);
+            });
+        </script>
     </body>
 </html>
